@@ -31,6 +31,24 @@ app.use('/api/upload', limiter);
 
 app.use(express.json({ limit: '1mb' }));
 
+
+// ─── Add this block BEFORE your existing route registrations ─────────────────
+// Example: right after `app.use(express.json())`
+
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// ─── Your existing routes stay untouched below ────────────────────────────────
+// app.use("/api/upload",  uploadRouter);
+// app.use("/api/history", historyRouter);
+// ...
+
+
 // Health check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
